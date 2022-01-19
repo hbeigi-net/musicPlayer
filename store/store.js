@@ -7,10 +7,7 @@ export const initailState ={
     musicList : musics,
     entities : {
         player : {
-            currentMusic : {
-                title : "nothing elese matters" , 
-                artist : "metallica"
-            },
+            currentMusic : musics[0],
             isPlaying : false 
         },
         sideList : {
