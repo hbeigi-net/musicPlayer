@@ -1,29 +1,30 @@
-// import {createAction , createReducer} from "@reduxjs/toolkit"
-import {createSlice} from "@reduxjs/toolkit"
-import {initialState} from "../store"
+import {
+    createAction,
+    createReducer
+} from "@reduxjs/toolkit";
+import musics from "../data"
+const initialState = {
+    musicList: musics,
+    currentMusicId: null,
+    isPlaying: false,
 
-// export const PLAY_TOGGLE = createAction("PLAY_TOGGLE");
-// export const SLIDER_CHANGE = createAction("SLIDER_CHANGE");
-// export const TO_NEXT = createAction("TO_NEXT");
-// export const TO_PREV = createAction("TO_PREV");
+}
+
+export const togglePlay = createAction("TOGGLE_PLAY");
+export const changeMusic = createAction("CHANGE_MUSIC");
+export const sliderChange = createAction("SLIDER_CHANGE");
 
 
-// const playerReducer = createReducer(initialState ,{
-//     [PLAY_TOGGLE.type] : (state , action)=>{
-//         state.entities.player.isPlaying = !state.entities.player.isPlaying
-//     }
-// }
-// )
 
-const playerSlice = createSlice({
-    name : "playerSlice" , 
-    initialState : initialState , 
-    reducers : {
-        PLAY_TOGGLE  : (state ,action)=>{
-            
-        }
-    }
+const playerReducer = createReducer(initialState, (builder) => {
+    builder
+        .addCase(changeMusic, (state, action) => {
+            state.currentMusicId = action.payload.musicId
+        })
+        .addCase(togglePlay, (state, action) => {
+            state.isPlaying = !action.payload.isPlaying
+        })
+
 })
 
-
-// export default playerReducer;
+export default playerReducer;
