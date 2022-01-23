@@ -2,10 +2,9 @@ import {
     createAction,
     createReducer
 } from "@reduxjs/toolkit";
-import musics from "../data"
+
 const initialState = {
-    musicList: musics,
-    currentMusicId: null,
+
     isPlaying: false,
 
 }
@@ -23,6 +22,7 @@ const playerReducer = createReducer(initialState, (builder) => {
         })
         .addCase(togglePlay, (state, action) => {
             state.isPlaying = !action.payload.isPlaying
+            console.log("togglePlay invoked")
         })
 
 })

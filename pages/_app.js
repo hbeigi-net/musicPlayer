@@ -1,18 +1,37 @@
-import {useEffect} from "react"
+import App from "next/app"
+import withRedux from "next-redux-wrapper"
+import React from "react";
 import 'bootstrap/dist/css/bootstrap.css';
 import "../styles/root.scss";
-import appStore from "../contexts/storeContext";
 import store from "../store/store";
-function MyApp({ Component, pageProps }) {
-  useEffect(() => {
+import {
+  Provider
+} from "react-redux"
+class MyApp extends App {
+  static async getInitialProps({
+    Component,
+    ctx
+  }) {
+    const appProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
+    return {
+      appProps
+    };
+  }
+  componentDidMount() {
     import("bootstrap/dist/js/bootstrap");
-  }, []);
+  }
+  render() {
+    const {
+      Component,
+      appProps
+    } = this.props;
 
-  return (
-    <appStore.Provider value={store}>
-       <Component {...pageProps} />
-    </appStore.Provider>
-  )
+    return ( 
+      <Provider store = {store} >
+      <Component {...appProps}/>
+       </Provider>
+    );
+  }
 }
-
-export default MyApp
+const makeStore = () => store
+export default withRedux(makeStore)(MyApp)
