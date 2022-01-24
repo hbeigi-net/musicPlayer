@@ -1,0 +1,22 @@
+.songItem {
+  cursor: pointer;
+  background-color: rgba(248, 60, 170, 0.515);
+  &:hover {
+    background-color: rgba(211, 30, 120, 0.638) !important;
+    transform: scale(.98,.98);
+    -webkit-transform: scale(.98,.98);
+    -moz-transform: scale(.98,.98);
+    -ms-transform: scale(.98,.98);
+    -o-transform: scale(.98,.98);
+}
+  transition: all 432ms ease !important;
+  -webkit-transition: all 432ms ease !important;
+  -moz-transition: all 432ms ease !important;
+  -ms-transition: all 432ms ease !important;
+  -o-transition: all 432ms ease !important;
+}
+
+.activeSongItem
+{
+  background-color: rgba(65, 105, 225, 0.631) !important;
+}

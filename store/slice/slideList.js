@@ -12,7 +12,7 @@ export const toggleList = createAction("TOGGLE_LIST")
 
 
 const initialState = {
-    isOpen: true,
+    isOpen: false,
     musicList : musics,
     currentMusic: musics[7]
 }

@@ -18,9 +18,10 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import Player from "../components/Player"
-
+import {useSelector , useDispatch} from "react-redux"
 const drawerWidth = 240;
-
+import { toggleList } from '../store/slice/slideList';
+import SongItem from "./songItem"
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
     flexGrow: 1,
@@ -68,20 +69,25 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 export default function PersistentDrawerLeft(props) {
   const theme = useTheme();
+  const isOpen = useSelector(state => state.SideList.isOpen);
+  const currentMusic = useSelector(state=>state.SideList.currentMusic);
+  const dispatch=useDispatch();
   const [open, setOpen] = React.useState(false);
 
   const handleDrawerOpen = () => {
+    dispatch(toggleList(false))
     setOpen(true);
   };
-
+  
   const handleDrawerClose = () => {
     setOpen(false);
+    dispatch(toggleList(true))
   };
 
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open}>
+      <AppBar position="fixed" color='secondary' open={open}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -93,7 +99,7 @@ export default function PersistentDrawerLeft(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Persistent drawer
+            music list
           </Typography>
         </Toolbar>
       </AppBar>
@@ -116,26 +122,8 @@ export default function PersistentDrawerLeft(props) {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+        <List sx={{paddingX : '10px'}}>
+          <SongItem/>
         </List>
       </Drawer>
       <Main open={open}>
