@@ -14,8 +14,23 @@ a {
 * {
   box-sizing: border-box;
 }
+.MuiPaper-root.MuiPaper-elevation {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 99, 185, 0.871) rgba(172, 172, 172, 0);
+  &::-webkit-scrollbar {
+    width: 5px;
+    background-color: rgb(172, 172, 172);
+  }
 
-
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 99, 185, 0.871);
+    border-radius: 300px;
+    -webkit-border-radius: 300px;
+    -moz-border-radius: 300px;
+    -ms-border-radius: 300px;
+    -o-border-radius: 300px;
+  }
+}
 
 @import "songItem";
 @import "player";

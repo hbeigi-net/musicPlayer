@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { useSelector , useDispatch } from 'react-redux';
 import {selectByClick} from "../store/slice/Musics"
 import styles from "../styles/songItem.module.css"
-export default function songItem({music , isActive}) {
+export default function songItem({music }) {
     const [song, setSong] = useState(music);
     const dispatch = useDispatch(); 
-    // const currentMusic = useSelector(state => state.ent.currentMusic.id);
+    const currentMusic = useSelector(state => state.ent.currentMusic.id);
     const clickHandler = (e , id)=>
     {
         dispatch(selectByClick({id}))
@@ -13,8 +13,8 @@ export default function songItem({music , isActive}) {
 
     return (
       <>
-            <li onClick={(e)=>clickHandler(song.id)}
-             className={`songItem d-flex align-items-center w-100 mx-auto  shadow rounded my-3 overflow-hidden ${isActive?"activeSongItem" :""}`}>
+            <li onClick={(e)=>clickHandler(e , song.id)}
+             className={`songItem d-flex align-items-center w-100 mx-auto  shadow rounded my-3 overflow-hidden ${song.id == currentMusic?"activeSongItem" :""}`}>
                 <img 
                     src = {song.banner}
                     alt='img'  

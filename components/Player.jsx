@@ -172,13 +172,14 @@ function MyPlayer()
             mt: -1,
           }}
         >
-          <IconButton aria-label="previous song" onClick={()=>dispatch(toPrev({id : currentMusic.id}))}>
+          <IconButton aria-label="previous song" onClick={(e)=>dispatch(toPrev({id : currentMusic.id}))}>
             <FastRewindRounded fontSize="large" htmlColor={mainIconColor} />
           </IconButton>
           <IconButton
             onClick={() =>{ 
               
               dispatch(togglePlay({isplaying : !isPlaying}))
+
             }}
           >
             {isPlaying ? (

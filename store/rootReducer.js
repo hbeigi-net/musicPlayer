@@ -5,7 +5,6 @@ import playerReducer from "./slice/player"
 import listReducer from "./slice/slideList"
 import musicReducer from "./slice/Musics"
 
-
 const UIReducers = combineReducers({
     SideList: listReducer,
     Player: playerReducer
@@ -13,7 +12,7 @@ const UIReducers = combineReducers({
 
 const rootReducer = combineReducers({
     UI : UIReducers , 
-    ent:musicReducer 
+    ent:musicReducer
 })
 
 export default rootReducer;

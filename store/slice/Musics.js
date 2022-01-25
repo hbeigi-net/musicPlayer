@@ -20,14 +20,12 @@ const initialState = {
 const musicReducer = createReducer(initialState, {
     [selectByClick.type]: (state, action) => {
         const newIndex = state.musicList.findIndex(item => item.id === action.payload.id);
-        //    console.log(state["currentMusic"]);
-        return {
-            [state.currentMusic]: state.musicList[newIndex]
-        }
+        state.currentMusic = state.musicList[newIndex];
+      
 
     },
     [toNext.type]: (state, action) => {
-        const currentIndex = state.currentMusic.id;
+        const currentIndex = state.musicList.findIndex(item => item.id === action.payload.id);
         if (currentIndex == state.musicList.length - 1) {
             state.currentMusic = state.musicList[0]
         } else {
@@ -36,7 +34,7 @@ const musicReducer = createReducer(initialState, {
         }
     },
     [toPrev.type]: (state, action) => {
-        const currentIndex = state.currentMusic.id;
+        const currentIndex =state.musicList.findIndex(item => item.id === action.payload.id);
         if (currentIndex == 0) {
             state.currentMusic = state.musicList[state.musicList.length - 1]
         } else {
@@ -46,19 +44,5 @@ const musicReducer = createReducer(initialState, {
     },
 })
 
-// const newReducer = (state = initialState, action) => {
-//     switch (action.type) {
-//         case selectByClick.type:
-//             const newIndex = state.musicList.findIndex(item => item.id === action.payload.id);
-//             return {
-//                 ...state , 
-//                 currentMusic: state.musicList[newIndex]
-//             }
-
-
-//         default:
-//             return {...state}
-//     }
-// }
 
 export default musicReducer;

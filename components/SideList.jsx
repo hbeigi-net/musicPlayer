@@ -104,17 +104,12 @@ export default function PersistentDrawerLeft(props) {
 
           {
             musicList.map(item=>
-              {
-                if(item.id ===currentMusic)
-                {
-                  return (
-                    <songItem music = {item} isActive ={true}/>
-                  )
-                }
+            {
                 return (
                   <SongItem music ={item} />
                 )
-              })
+            
+            })
           }
         </List>
       </Drawer>
