@@ -4,24 +4,20 @@ import {
 } from "@reduxjs/toolkit";
 
 const initialState = {
-
     isPlaying: false,
-
+    currentTime : 0 
 }
 
 export const togglePlay = createAction("TOGGLE_PLAY");
-export const changeMusic = createAction("CHANGE_MUSIC");
-export const sliderChange = createAction("SLIDER_CHANGE");
+
+// export const sliderChange = createAction("SLIDER_CHANGE");
 
 
 
 const playerReducer = createReducer(initialState, (builder) => {
     builder
-        .addCase(changeMusic, (state, action) => {
-            state.currentMusicId = action.payload.musicId
-        })
         .addCase(togglePlay, (state, action) => {
-            state.isPlaying = !action.payload.isPlaying
+            state.isPlaying = action.payload.isplaying
             console.log("togglePlay invoked")
         })
 

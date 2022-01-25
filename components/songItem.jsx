@@ -1,23 +1,33 @@
 import React, { useState } from 'react';
 import { useSelector , useDispatch } from 'react-redux';
-export default function songItem(props) {
-    const [song, setSong] = useState(props.item);
-  return (
+import {selectByClick} from "../store/slice/Musics"
+import styles from "../styles/songItem.module.css"
+export default function songItem({music , isActive}) {
+    const [song, setSong] = useState(music);
+    const dispatch = useDispatch(); 
+    // const currentMusic = useSelector(state => state.ent.currentMusic.id);
+    const clickHandler = (e , id)=>
+    {
+        dispatch(selectByClick({id}))
+    }
+
+    return (
       <>
-        <li onClick={(e)=>props.clickHandler(e,props.itemId)} className='songItem d-flex align-items-center w-100 mx-auto  shadow rounded my-3 overflow-hidden'>
-            <img 
-                src = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/220px-Image_created_with_a_mobile_phone.png"
-                alt='img'  
-                className='img-fluid col-5' />
-            <div className="itemInfo ms-2">
-                <h4 className='musicItemTitle m-0'>
-                    musicTitle
-                </h4>
-                <p className='musicItemArtist pb-0 m-0'>
-                    artist Name 
-                </p>
-            </div>
-        </li>
-      </>
-  );
+            <li onClick={(e)=>clickHandler(song.id)}
+             className={`songItem d-flex align-items-center w-100 mx-auto  shadow rounded my-3 overflow-hidden ${isActive?"activeSongItem" :""}`}>
+                <img 
+                    src = {song.banner}
+                    alt='img'  
+                    className='img-fluid col-5' />
+                <div className="itemInfo ms-2">
+                    <h5 className={`musicItemTitle m-0 ${styles.reder}`}>
+                        {song.title}
+                    </h5>
+                    <p className='musicItemArtist text-dark pb-0 m-0 fs-6'>
+                        {song.artist.slice(0,15)}
+                    </p>
+                </div>
+            </li>
+        </>
+      );
 }

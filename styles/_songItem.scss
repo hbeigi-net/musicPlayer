@@ -1,5 +1,6 @@
 .songItem {
   cursor: pointer;
+  color : rgb(255, 255, 255);
   background-color: rgba(248, 60, 170, 0.515);
   &:hover {
     background-color: rgba(211, 30, 120, 0.638) !important;
@@ -9,11 +10,11 @@
     -ms-transform: scale(.98,.98);
     -o-transform: scale(.98,.98);
 }
-  transition: all 432ms ease !important;
-  -webkit-transition: all 432ms ease !important;
-  -moz-transition: all 432ms ease !important;
-  -ms-transition: all 432ms ease !important;
-  -o-transition: all 432ms ease !important;
+  transition: all 432ms ease ;
+  -webkit-transition: all 432ms ease ;
+  -moz-transition: all 432ms ease ;
+  -ms-transition: all 432ms ease ;
+  -o-transition: all 432ms ease ;
 }
 
 .activeSongItem

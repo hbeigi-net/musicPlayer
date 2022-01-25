@@ -7,16 +7,9 @@ import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import CloseIcon from '@mui/icons-material/Close';
 import Player from "../components/Player"
 import {useSelector , useDispatch} from "react-redux"
 const drawerWidth = 240;
@@ -68,38 +61,27 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 export default function PersistentDrawerLeft(props) {
-  const theme = useTheme();
-  const isOpen = useSelector(state => state.SideList.isOpen);
-  const currentMusic = useSelector(state=>state.SideList.currentMusic);
+  const isOpen = useSelector(state => state.UI.SideList.isOpen);
+  const musicList = useSelector(state => state.ent.musicList);
+  const currentMusic = useSelector(state => state.ent.currentMusic.id);
   const dispatch=useDispatch();
-  const [open, setOpen] = React.useState(false);
 
   const handleDrawerOpen = () => {
     dispatch(toggleList(false))
-    setOpen(true);
   };
   
   const handleDrawerClose = () => {
-    setOpen(false);
     dispatch(toggleList(true))
   };
 
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" color='secondary' open={open}>
+      <AppBar position="fixed" color='secondary' open={isOpen}>
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{ mr: 2, ...(open && { display: 'none' }) }}
-          >
-            <MenuIcon />
-          </IconButton>
+
           <Typography variant="h6" noWrap component="div">
-            music list
+            Music Player
           </Typography>
         </Toolbar>
       </AppBar>
@@ -114,20 +96,43 @@ export default function PersistentDrawerLeft(props) {
         }}
         variant="persistent"
         anchor="left"
-        open={open}
+        open={isOpen}
       >
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
+
+
         <List sx={{paddingX : '10px'}}>
-          <SongItem/>
+
+          {
+            musicList.map(item=>
+              {
+                if(item.id ===currentMusic)
+                {
+                  return (
+                    <songItem music = {item} isActive ={true}/>
+                  )
+                }
+                return (
+                  <SongItem music ={item} />
+                )
+              })
+          }
         </List>
       </Drawer>
-      <Main open={open}>
+      <Main open={isOpen}>
         <DrawerHeader />
+          <IconButton   onClick={handleDrawerClose} sx={{fontSize : "5rem" , position : "fixed" , zIndex : "100" ,top:"100px",right:"100px" ,...(!isOpen && { display: 'none' }) }}>
+              <CloseIcon fontSize='.8rem' color ="error" />
+          </IconButton>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            sx={{ mr: 2, ...(isOpen && { display: 'none' }) ,fontSize : "5rem" ,  position : "fixed" , zIndex : "100" ,top:"100px",right:"100px" }}
+          >
+            <MenuIcon color='warning' fontSize='1rem' />
+          </IconButton>
+          
             <Player/>
       </Main>
     </Box>

@@ -1,0 +1,26 @@
+.songItem {
+    cursor: pointer;
+    background-color: rgba(248, 60, 170, 0.515);
+    transition: all 432ms ease;
+    -webkit-transition: all 432ms ease;
+    -moz-transition: all 432ms ease;
+    -ms-transition: all 432ms ease;
+    -o-transition: all 432ms ease;
+}
+
+.songItem:hover {
+    background: rgb(124, 253, 29);
+    background: linear-gradient(349deg,
+            rgba(124, 253, 29, 0.41778709774925593) 1%,
+            rgba(198, 105, 62, 0.5914565655363708) 46%,
+            rgba(69, 100, 252, 0.6362744927072391) 74%);
+    transform: scale(0.98, 0.98);
+    -webkit-transform: scale(0.98, 0.98);
+    -moz-transform: scale(0.98, 0.98);
+    -ms-transform: scale(0.98, 0.98);
+    -o-transform: scale(0.98, 0.98);
+}
+
+.activeSongItem {
+    background-color: rgba(65, 105, 225, 0.631) ;
+  }

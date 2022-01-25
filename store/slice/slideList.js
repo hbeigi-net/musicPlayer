@@ -2,19 +2,11 @@ import {
     createAction,
     createReducer
 } from "@reduxjs/toolkit";
-import musics from "../data"
-// import {
-//     togglePlay
-// } from "./player";
-
 
 export const toggleList = createAction("TOGGLE_LIST")
 
-
 const initialState = {
-    isOpen: false,
-    musicList : musics,
-    currentMusic: musics[7]
+    isOpen: false
 }
 
 const listReducer = createReducer(initialState, (builder) => {

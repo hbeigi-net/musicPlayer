@@ -11,8 +11,10 @@ import FastForwardRounded from '@mui/icons-material/FastForwardRounded';
 import FastRewindRounded from '@mui/icons-material/FastRewindRounded';
 import VolumeUpRounded from '@mui/icons-material/VolumeUpRounded';
 import VolumeDownRounded from '@mui/icons-material/VolumeDownRounded';
-import { togglePlay , changeMusic , sliderChange } from '../store/slice/player';
-import {connect}from "react-redux"
+import {toNext , toPrev}from "../store/slice/Musics"
+import { togglePlay } from '../store/slice/player';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 const WallPaper = styled('div')({
   position: 'absolute',
   width: '100%',
@@ -78,11 +80,14 @@ const TinyText = styled(Typography)({
   letterSpacing: 0.2,
 });
 
-function MusicPlayerSlider({togglePlay , changeMusic , sliderChange , currentMusic}) {
+function MyPlayer() 
+{
+  const currentMusic = useSelector(state => state.ent.currentMusic);
+  const isPlaying = useSelector(state => state.UI.Player.isPlaying);
+  const dispatch = useDispatch();
   const theme = useTheme();
-  const duration = 200; // seconds
+  const [duration,setDuration] = React.useState(200)
   const [position, setPosition] = React.useState(32);
-  const [paused, setPaused] = React.useState(false);
   function formatDuration(value) {
     const minute = Math.floor(value / 60);
     const secondLeft = value - minute * 60;
@@ -91,25 +96,25 @@ function MusicPlayerSlider({togglePlay , changeMusic , sliderChange , currentMus
   const mainIconColor = theme.palette.mode === 'dark' ? '#fff' : '#000';
   const lightIconColor =
     theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)';
+
+
+  
   return (
     <Box sx={{ width: '100%', overflow: 'hidden' , display : 'flex' , alignItems : "center" , height : "calc(200%)" }}>
       <Widget>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <CoverImage>
             <img
-              alt="can't win - Chilling Sunday"
+              alt={currentMusic.title +" "+ currentMusic.artist}
               src={currentMusic.banner}
             />
           </CoverImage>
           <Box sx={{ ml: 1.5, minWidth: 0 }}>
             <Typography variant="caption" color="text.secondary" fontWeight={500}>
-              Jun Pulse
+              {currentMusic.artist}
             </Typography>
             <Typography noWrap>
-              <b>คนเก่าเขาทำไว้ดี (Can&apos;t win)</b>
-            </Typography>
-            <Typography noWrap letterSpacing={-0.25}>
-              Chilling Sunday &mdash; คนเก่าเขาทำไว้ดี
+              <b>{currentMusic.title}</b>
             </Typography>
           </Box>
         </Box>
@@ -167,18 +172,16 @@ function MusicPlayerSlider({togglePlay , changeMusic , sliderChange , currentMus
             mt: -1,
           }}
         >
-          <IconButton aria-label="previous song">
+          <IconButton aria-label="previous song" onClick={()=>dispatch(toPrev({id : currentMusic.id}))}>
             <FastRewindRounded fontSize="large" htmlColor={mainIconColor} />
           </IconButton>
           <IconButton
-            aria-label={paused ? 'play' : 'pause'}
             onClick={() =>{ 
-              setPaused(!paused);
-              togglePlay(paused);
-              console.log(currentMusic);
+              
+              dispatch(togglePlay({isplaying : !isPlaying}))
             }}
           >
-            {paused ? (
+            {isPlaying ? (
               <PlayArrowRounded
                 sx={{ fontSize: '3rem' }}
                 htmlColor={mainIconColor}
@@ -187,7 +190,7 @@ function MusicPlayerSlider({togglePlay , changeMusic , sliderChange , currentMus
               <PauseRounded sx={{ fontSize: '3rem' }} htmlColor={mainIconColor} />
             )}
           </IconButton>
-          <IconButton aria-label="next song">
+          <IconButton aria-label="next song" onClick={()=>dispatch(toNext({id : currentMusic.id}))}>
             <FastForwardRounded fontSize="large" htmlColor={mainIconColor} />
           </IconButton>
         </Box>
@@ -225,19 +228,6 @@ function MusicPlayerSlider({togglePlay , changeMusic , sliderChange , currentMus
 
 
 
-const mapStateToprops = (state) => {
-  return {
-      currentMusic : state.SideList.currentMusic
-  }
-}
-
-const mapDispatchToProps = dispatch=>{
-  return {
-    togglePlay  :(payload)=> dispatch(togglePlay(payload)),
-    changeMusic :(payload)=> dispatch(changeMusic(payload)),
-    sliderChange:(payload)=> dispatch(sliderChange(payload))
-  }
-}
 
 
-export default connect(mapStateToprops,mapDispatchToProps)(MusicPlayerSlider)
+export default MyPlayer
