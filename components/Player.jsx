@@ -82,12 +82,16 @@ const TinyText = styled(Typography)({
 
 function MyPlayer() 
 {
+  const [song , setSong] = React.useState();
   const currentMusic = useSelector(state => state.ent.currentMusic);
   const isPlaying = useSelector(state => state.UI.Player.isPlaying);
   const dispatch = useDispatch();
   const theme = useTheme();
-  const [duration,setDuration] = React.useState(200)
-  const [position, setPosition] = React.useState(32);
+  const [duration,setDuration] = React.useState(0)
+  const [position, setPosition] = React.useState(0);
+  const [volume , setVolume] =React.useState(50);
+  const [change , setChange] = React.useState(false);
+  var newSong;
   function formatDuration(value) {
     const minute = Math.floor(value / 60);
     const secondLeft = value - minute * 60;
@@ -97,8 +101,58 @@ function MyPlayer()
   const lightIconColor =
     theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)';
 
-
+  React.useEffect(()=>
+  {
+    if(song)
+    {
+      song.pause();
+    }
+    newSong = new Audio(currentMusic.src)
+    setSong(newSong);
+ 
+      try {
+        newSong.play();
+        dispatch(togglePlay(true));
+      }catch(error)
+      {
   
+      }
+    
+  
+    newSong.addEventListener("loadedmetadata"  , ()=>
+    {
+      setDuration( Math.trunc(newSong.duration))
+    })
+    const timer = setInterval(() => {
+      setPosition(Math.trunc(newSong.currentTime))
+    }, 1000);
+    
+    return ()=>
+    {
+      clearInterval(timer)
+      newSong.removeEventListener("loadedmetadata" ,()=>{
+        setDuration( Math.trunc(newSong.duration))
+      })
+    }
+  }
+  ,[currentMusic ])
+
+  React.useEffect(()=>
+  {
+    if(song)
+    {
+      song.currentTime = position;
+      setChange(false);
+    }
+  },[change])
+
+  React.useEffect(()=>
+  {
+    if(song)
+    {
+      song.volume = volume/100
+    }
+  },[volume])
   return (
     <Box sx={{ width: '100%', overflow: 'hidden' , display : 'flex' , alignItems : "center" , height : "calc(200%)" }}>
       <Widget>
@@ -125,7 +179,13 @@ function MyPlayer()
           min={0}
           step={1}
           max={duration}
-          onChange={(_, value) => setPosition(value)}
+          onChange={(_, value) =>{
+          setPosition(value);
+          setChange(true)
+        
+         }
+          
+        } 
           sx={{
             color: theme.palette.mode === 'dark' ? '#fff' : 'rgba(0,0,0,0.87)',
             height: 4,
@@ -161,6 +221,7 @@ function MyPlayer()
             mt: -2,
           }}
         >
+
           <TinyText>{formatDuration(position)}</TinyText>
           <TinyText>-{formatDuration(duration - position)}</TinyText>
         </Box>
@@ -172,26 +233,39 @@ function MyPlayer()
             mt: -1,
           }}
         >
-          <IconButton aria-label="previous song" onClick={(e)=>dispatch(toPrev({id : currentMusic.id}))}>
+          <IconButton aria-label="previous song" onClick={(e)=>{
+              song.pause()
+              dispatch(toPrev({id : currentMusic.id}))
+            }}
+            
+>
             <FastRewindRounded fontSize="large" htmlColor={mainIconColor} />
           </IconButton>
           <IconButton
-            onClick={() =>{ 
-              
+            onClick={() =>{
+              if(!isPlaying)
+              {
+                song.pause();
+              }
+              else
+              {
+                song.play();
+              }
               dispatch(togglePlay({isplaying : !isPlaying}))
-
             }}
-          >
+            >
             {isPlaying ? (
               <PlayArrowRounded
-                sx={{ fontSize: '3rem' }}
-                htmlColor={mainIconColor}
+              sx={{ fontSize: '3rem' }}
+              htmlColor={mainIconColor}
               />
-            ) : (
-              <PauseRounded sx={{ fontSize: '3rem' }} htmlColor={mainIconColor} />
-            )}
+              ) : (
+                <PauseRounded sx={{ fontSize: '3rem' }} htmlColor={mainIconColor} />
+                )}
           </IconButton>
-          <IconButton aria-label="next song" onClick={()=>dispatch(toNext({id : currentMusic.id}))}>
+          <IconButton aria-label="next song" onClick={()=>{
+            song.pause()
+            dispatch(toNext({id : currentMusic.id}))}}>
             <FastForwardRounded fontSize="large" htmlColor={mainIconColor} />
           </IconButton>
         </Box>
@@ -199,7 +273,11 @@ function MyPlayer()
           <VolumeDownRounded htmlColor={lightIconColor} />
           <Slider
             aria-label="Volume"
-            defaultValue={30}
+            defaultValue={50}
+            min={0}
+            onChange={(e , value)=>setVolume(value)}
+            max = {100}
+            value ={volume}
             sx={{
               color: theme.palette.mode === 'dark' ? '#fff' : 'rgba(0,0,0,0.87)',
               '& .MuiSlider-track': {
