@@ -125,8 +125,15 @@ function MyPlayer()
     })
     const timer = setInterval(() => {
       setPosition(Math.trunc(newSong.currentTime))
+      if(position == Math.trunc(newSong.duration))
+      {
+     
+      }
     }, 1000);
-    
+    newSong.onended=()=>
+    {
+      dispatch(toNext({id:currentMusic.id}));
+    }
     return ()=>
     {
       clearInterval(timer)
@@ -141,6 +148,7 @@ function MyPlayer()
   {
     if(song)
     {
+      
       song.currentTime = position;
       setChange(false);
     }
